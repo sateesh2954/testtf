@@ -6,10 +6,6 @@ data "ibm_resource_group" "rg" {
   name = var.resource_group
 }
 
-data "ibm_is_subnet" "subnet" {
-  name = var.subnet_name
-}
-
 resource "ibm_is_security_group" "sg" {
   name           = "test-sg"
   vpc            = data.ibm_is_vpc.vpc.id
