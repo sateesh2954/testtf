@@ -11,7 +11,7 @@ data "ibm_is_subnet" "subnet" {
 }
 
 resource "ibm_is_security_group" "sg" {
-  name           = "${var.host_name}-sg"
+  name           = "test-sg"
   vpc            = data.ibm_is_vpc.vpc.id
   resource_group = data.ibm_resource_group.rg.id
 }
@@ -24,17 +24,6 @@ resource "ibm_is_security_group_rule" "inbound_tcp_port_22" {
   tcp {
     port_min = 22
     port_max = 22
-  }
-}
-
-resource "ibm_is_security_group_rule" "inbound_tcp_port_443" {
-  group     = ibm_is_security_group.sg.id
-  direction = "inbound"
-  remote    = "0.0.0.0/0"
-
-  tcp {
-    port_min = 443
-    port_max = 443
   }
 }
 
