@@ -7,9 +7,13 @@ data "ibm_resource_group" "rg" {
 }
 
 resource "ibm_is_security_group" "sg" {
-  name           = "test-sg"
+  name           = "test-sg1"
   vpc            = data.ibm_is_vpc.vpc.id
   resource_group = data.ibm_resource_group.rg.id
+}
+
+locals {
+  security_rule_name = "inbound_tcp_port_22"
 }
 
 resource "ibm_is_security_group_rule" "inbound_tcp_port_22" {
@@ -27,6 +31,15 @@ resource "ibm_is_security_group_rule" "outbound_all" {
   group     = ibm_is_security_group.sg.id
   direction = "outbound"
   remote    = "0.0.0.0/0"
+}
+
+resource "null_resource" "delete_security_rule" {
+    provisioner "local-exec" {
+        command = "./scripts/delete_security_rule.sh ${local.security_rule_name}"
+    }
+    triggers = {
+    security_rule_name = local.security_rule_name
+  }
 }
 
 
