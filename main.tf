@@ -1,5 +1,10 @@
 provider "ibm" {
   version = "1.15.0"
+  api_key = var.ibmcloud_api_key
+}
+
+variable "ibmcloud_api_key" {
+  type = string
 }
 
 resource "ibm_is_vpc" "vpc" {
