@@ -1,9 +1,3 @@
-provider "ibm" {
-  source  = "IBM-Cloud/ibm"
-  version = "1.30.0"
-  api_key = var.ibmcloud_api_key
-}
-
 variable "ibmcloud_api_key" {
   type = string
 }
