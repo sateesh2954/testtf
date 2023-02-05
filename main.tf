@@ -8,7 +8,7 @@ variable "ibmcloud_api_key" {
 }
 
 resource "ibm_is_vpc" "vpc" {
-  name = "my-vpc"
+  name = "sat-test"
 }
 
 resource "ibm_is_security_group" "sg" {
