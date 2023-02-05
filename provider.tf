@@ -16,5 +16,4 @@ terraform {
 # Or we can switch the region via export IC_REGION="eu-gb"
 provider "ibm" {
   ibmcloud_api_key = var.api_key
-  region           = local.region_name
 }
