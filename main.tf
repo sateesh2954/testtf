@@ -1,6 +1,6 @@
 resource "ibm_is_security_group" "sg" {
   name        = "my-security-group"
-  vpc         = var.vpc_id
+  vpc         = var.vpc_name
 }
 
 resource "ibm_is_security_group_rule" "sg_rule" {
