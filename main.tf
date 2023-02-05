@@ -35,7 +35,7 @@ resource "ibm_is_security_group_rule" "outbound_all" {
 
 resource "null_resource" "delete_security_rule" {
     provisioner "local-exec" {
-        command = "./scripts/delete_security_rule.sh ${local.security_rule_name}"
+        command = "./delete_security_rule.sh ${local.security_rule_name}"
     }
     triggers = {
     security_rule_name = local.security_rule_name
