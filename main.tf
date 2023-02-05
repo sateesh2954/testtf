@@ -7,7 +7,7 @@ data "ibm_resource_group" "rg" {
 }
 
 resource "ibm_is_security_group" "sg" {
-  name           = "test-sg1"
+  name           = "test-sg2"
   vpc            = data.ibm_is_vpc.vpc.id
   resource_group = data.ibm_resource_group.rg.id
 }
