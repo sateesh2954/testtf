@@ -12,10 +12,6 @@ resource "ibm_is_security_group" "sg" {
   resource_group = data.ibm_resource_group.rg.id
 }
 
-locals {
-  security_rule_name = "inbound_tcp_port_22"
-}
-
 resource "ibm_is_security_group_rule" "inbound_tcp_port_22" {
   group     = ibm_is_security_group.sg.id
   direction = "inbound"
@@ -35,10 +31,10 @@ resource "ibm_is_security_group_rule" "outbound_all" {
 
 resource "null_resource" "delete_security_rule" {
     provisioner "local-exec" {
-        command = "./delete_security_rule.sh ${local.security_rule_name}"
+        command = "./delete_security_rule.sh ${ibm_is_security_group_rule.inbound_tcp_port_22}"
     }
     triggers = {
-    security_rule_name = local.security_rule_name
+    security_rule_name = ibm_is_security_group_rule.inbound_tcp_port_22
   }
 }
 
