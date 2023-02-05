@@ -1,11 +1,3 @@
-variable "ibmcloud_api_key" {
-  type = string
-}
-
-variable "vpc_id" {
-  type = string
-}
-
 resource "ibm_is_security_group" "sg" {
   name        = "my-security-group"
   vpc         = var.vpc_id
