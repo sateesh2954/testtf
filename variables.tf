@@ -20,3 +20,15 @@ variable "resource_group" {
   default     = "Default"
   description = "Resource group name from your IBM Cloud account where the VPC resources should be deployed. [Learn more](https://cloud.ibm.com/docs/account?topic=account-rgs)."
 }
+
+variable "region_name" {
+  type        = string
+  default     = "Default"
+  description = "Resource group name from your IBM Cloud account where the VPC resources should be deployed. [Learn more](https://cloud.ibm.com/docs/account?topic=account-rgs)."
+}
+
+variable "zone" {
+  type        = string
+  default     = "Default"
+  description = "Resource group name from your IBM Cloud account where the VPC resources should be deployed. [Learn more](https://cloud.ibm.com/docs/account?topic=account-rgs)."
+}
