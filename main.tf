@@ -20,7 +20,7 @@ data "ibm_is_vpc" "existing_vpc" {
 data "ibm_is_vpc" "vpc" {
   name = var.vpc_name
   // Depends on creation of new VPC or look up of existing VPC based on value of var.vpc_name,
-  depends_on = [ibm_is_vpc.vpc, data.ibm_is_vpc.existing_vpc]
+  depends_on = [ibm_is_vpc.ibm_is_vpc.vpc, data.ibm_is_vpc.existing_vpc]
 }
   
 data "template_file" "primary_user_data" {
