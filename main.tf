@@ -1,5 +1,5 @@
 provider "ibm" {
-  version = "1.15.0"
+  version = "1.13.0"
   api_key = var.ibmcloud_api_key
 }
 
