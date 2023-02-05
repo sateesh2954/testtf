@@ -16,8 +16,3 @@ variable "vpc_name" {
   description = "The name of VPC."
   type        = string
 }
-
-variable "subnet_name" {
-  description = "The name of subnet."
-  type        = string
-}
