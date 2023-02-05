@@ -7,13 +7,13 @@ variable "ibmcloud_api_key" {
   type = string
 }
 
-resource "ibm_is_vpc" "vpc" {
-  name = "sat-test"
+variable "vpc_id" {
+  type = string
 }
 
 resource "ibm_is_security_group" "sg" {
   name        = "my-security-group"
-  vpc         = ibm_is_vpc.vpc.id
+  vpc         = var.vpc_id
 }
 
 resource "ibm_is_security_group_rule" "sg_rule" {
