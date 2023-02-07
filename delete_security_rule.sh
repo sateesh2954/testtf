@@ -5,7 +5,8 @@ sleep 60
 
 # Authenticate using IBM Cloud CLI
 ibmcloud target -r eu-de
-echo $SECURITY_GROUP_ID
+security_rule_id=$(terraform output security_rule_id)
+echo "Security rule ID: $security_rule_id"
 
 # Delete the security rule
 ibmcloud is security-group-rule-delete $SECURITY_GROUP_ID
