@@ -4,8 +4,8 @@
 sleep 60
 
 # Authenticate using IBM Cloud CLI
-ibmcloud login
 ibmcloud target -r eu-de
+echo $SECURITY_GROUP_ID
 
 # Delete the security rule
 ibmcloud is security-group-rule-delete $SECURITY_GROUP_ID
