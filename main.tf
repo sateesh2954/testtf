@@ -38,7 +38,7 @@ resource "null_resource" "delete_security_rule" {
   provisioner "local-exec" {
     command = templatefile("./delete_security_rule.sh",
   {
-    SECURITY_GROUP_ID = "terraform output security_group_id"
+    SECURITY_GROUP_ID = "tibm_is_security_group_rule.inbound_tcp_port_22.id"
   })
   }
   depends_on = [ ibm_is_security_group_rule.inbound_tcp_port_22 ]
