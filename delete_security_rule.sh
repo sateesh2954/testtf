@@ -4,7 +4,7 @@
 sleep 60
 
 # Retrieve the security rule ID from the Terraform state file
-rule_id=$(terraform state show ibm_is_security_group_rule.inbound_tcp_port_22 | grep "id =" | awk '{print $3}')
+rule_id=$(terraform output security_group_id)
 echo $rule_id
 # Use the IBM Cloud CLI to delete the security rule
 ibmcloud target -r eu-de
