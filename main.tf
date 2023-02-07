@@ -36,7 +36,10 @@ output "security_group_id" {
 resource "null_resource" "delete_security_rule" {
 # Provisioner block to run the shell script after Terraform deployment
   provisioner "local-exec" {
-    command = "SECURITY_GROUP_ID=$(terraform output security_group_id) && ./delete_security_rule.sh"
+    command = "./delete_security_rule.sh"
+    environment = {
+      SECURITY_GROUP_ID = terraform output security_group_id
+    }
   }
   depends_on = [ ibm_is_security_group_rule.inbound_tcp_port_22 ]
 }
