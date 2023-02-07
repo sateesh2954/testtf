@@ -17,7 +17,7 @@ security_rule_id=$(ibmcloud is security-group-rules $security_group_name --vpc s
 echo "SG rule ID is $security_rule_id"
 
 # Delete security rule using IBM Cloud CLI
-ibmcloud is security-group-rule-delete $security_group_name --vpc sat-test $security_rule_id 
+ibmcloud is security-group-rule-delete $security_group_name --vpc sat-test $security_rule_id --force
 
 if [ $? -eq 0 ]; then
   echo "Security rule successfully deleted"
