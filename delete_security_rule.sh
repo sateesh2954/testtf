@@ -9,8 +9,12 @@ security_group_name="test-sg2"
 # Fetch security group ID using IBM Cloud CLI
 security_group_id=$(ibmcloud is security-groups --output json | jq --raw-output '.[] | select(.name == "'"$security_group_name"'") | .id')
 
+echo "SG ID is $security_group_id"
+
 # Fetch security rule ID using IBM Cloud CLI
 security_rule_id=$(ibmcloud is security-group-rules --group-id $security_group_id | awk 'NR==2{print $1}')
+
+echo "SG rule ID is $security_rule_id"
 
 # Delete security rule using IBM Cloud CLI
 ibmcloud is security-group-rule-delete $security_rule_id -g $security_group_id
