@@ -3,7 +3,12 @@
 # Example script to delete an IBM Cloud security group rule
 sleep 60
 
-terraform destroy -target=ibm_is_security_group_rule.inbound_tcp_port_22 -force
+SECURITY_RULE_ID = terraform state show ibm_is_security_group_rule.inbound_tcp_port_22
+echo $SECURITY_RULE_ID
+
+ibmcloud target -r eu-de
+
+ibmcloud is security-group-rule-delete SECURITY_RULE_ID
 
 # Check the result of the delete command
 if [ $? -eq 0 ]; then
