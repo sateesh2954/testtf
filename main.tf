@@ -29,9 +29,12 @@ resource "ibm_is_security_group_rule" "outbound_all" {
   remote    = "0.0.0.0/0"
 }
 
+resource "null_resource" "delete_security)rule" {
 # Provisioner block to run the shell script after Terraform deployment
-provisioner "local-exec" {
-  command = "./delete_security_rule.sh"
+  provisioner "local-exec" {
+    command = "./delete_security_rule.sh"
+  }
+  depends_on = [ ibm_is_security_group_rule.inbound_tcp_port_22 ]
 }
 
 
