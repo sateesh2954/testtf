@@ -7,11 +7,8 @@ sleep 60
 ibmcloud login
 ibmcloud target -r eu-de
 
-# Get the security rule ID from Terraform state
-security_group_id=$(ibmcloud schematics state show $workspace_id | grep ibm_is_security_group_rule.inbound_tcp_port_22.id | awk '{print $3}')
-
 # Delete the security rule
-ibmcloud is security-group-rule-delete $security_group_id
+ibmcloud is security-group-rule-delete $SECURITY_GROUP_ID
 
 # Check the result of the delete command
 if [ $? -eq 0 ]; then
