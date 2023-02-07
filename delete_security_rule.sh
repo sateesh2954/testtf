@@ -3,10 +3,12 @@
 # Example script to delete an IBM Cloud security group rule
 sleep 60
 
-# Authenticate using IBM Cloud CLI
-ibmcloud target -r eu-de
 security_rule_id=$ibm_is_security_group_rule.inbound_tcp_port_22.id
 echo "Security rule ID: $security_rule_id"
+
+# Authenticate using IBM Cloud CLI
+ibmcloud target -r eu-de
+
 
 # Delete the security rule
 ibmcloud is security-group-rule-delete $security_rule_id
