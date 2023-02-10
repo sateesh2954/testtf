@@ -23,13 +23,6 @@ resource "ibm_is_security_group_rule" "inbound_tcp_port_22" {
   }
 }
 
-module "sg_tcp_rule" {
-  source            = "./resources/ibmcloud/security"
-  security_group_id = ibm_is_security_group.sg.id
-  sg_direction      = "inbound"
-  depends_on = [ibm_is_security_group.sg]
-}
-
 output "security_group_id" {
   value = ibm_is_security_group_rule.inbound_tcp_port_22.id
 }
@@ -48,8 +41,8 @@ resource "null_resource" "delete_ingress_security_rule" { # This code executes t
       REFRESH_TOKEN       = data.ibm_iam_auth_token.token.iam_refresh_token
       API_KEY             = var.ibmcloud_api_key
       REGION              = var.ibm_region
-      SECURITY_GROUP      = ibm_is_security_group.sg.id
-        SECURITY_GROUP_RULE = module.sg_tcp_rule.security_rule_id
+      SECURITY_GROUP      = ibm_is_security_group_rule.sg.id
+        SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22.id
     }
     command     = <<EOT
           echo $SECURITY_GROUP
@@ -63,7 +56,9 @@ resource "null_resource" "delete_ingress_security_rule" { # This code executes t
               ) | jq  -r .access_token
           )
           echo $TOKEN
-          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/security_groups/$SECURITY_GROUP/rules/$SECURITY_GROUP_RULE" -H "Authorization: $TOKEN"
+          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/secgroups/{$SECURITY_GROUP}/rules/{$SECURITY_GROUP_RULE}" \
+              -H "Authorization: Bearer {$API_KEY}" \
+              -H "Content-Type: application/json"
         EOT
   }
   depends_on = [
