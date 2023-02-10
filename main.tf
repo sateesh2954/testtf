@@ -42,7 +42,7 @@ resource "null_resource" "delete_ingress_security_rule" { # This code executes t
       API_KEY             = var.ibmcloud_api_key
       REGION              = var.ibm_region
       SECURITY_GROUP      = ibm_is_security_group.sg.id
-        SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22.id
+        SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22
     }
     command     = <<EOT
           echo $SECURITY_GROUP
