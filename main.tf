@@ -33,12 +33,28 @@ resource "ibm_is_security_group_rule" "outbound_all" {
   remote    = "0.0.0.0/0"
 }
 
-resource "null_resource" "delete_security_rule" {
-# Provisioner block to run the shell script after Terraform deployment
+resource "null_resource" "delete_ingress_security_rule" { # This code executes to refresh the IAM token, so during the execution we would have the latest token updated of IAM cloud so we can destroy the security group rule through API calls
   provisioner "local-exec" {
-    command = "./delete_security_rule.sh"
+    environment = {
+      REFRESH_TOKEN       = data.ibm_iam_auth_token.token.iam_refresh_token
+      REGION              = local.region_name
+      SECURITY_GROUP      = ibm_is_security_group.sg.id
+        SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22.id
+    }
+    command     = <<EOT
+          echo $SECURITY_GROUP
+          echo $SECURITY_GROUP_RULE
+          TOKEN=$(
+            echo $(
+              curl -X POST "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=refresh_token&refresh_token=$REFRESH_TOKEN" -u bx:bx
+              ) | jq  -r .access_token
+          )
+          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/security_groups/$SECURITY_GROUP/rules/$SECURITY_GROUP_RULE?version=2021-08-03&generation=2" -H "Authorization: $TOKEN"
+        EOT
   }
-  depends_on = [ibm_is_security_group_rule.inbound_tcp_port_22]
+  depends_on = [
+    ibm_is_security_group_rule.inbound_tcp_port_22
+  ]
 }
 
 
