@@ -39,6 +39,7 @@ resource "null_resource" "delete_ingress_security_rule" { # This code executes t
   provisioner "local-exec" {
     environment = {
       REFRESH_TOKEN       = data.ibm_iam_auth_token.token.iam_refresh_token
+      API_KEY             = var.ibmcloud_api_key
       REGION              = var.ibm_region
       SECURITY_GROUP      = ibm_is_security_group.sg.id
         SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22.id
@@ -48,12 +49,13 @@ resource "null_resource" "delete_ingress_security_rule" { # This code executes t
           echo $SECURITY_GROUP_RULE
           echo $REFRESH_TOKEN
           echo $REGION
+          echo $API_KEY
           TOKEN=$(
             echo $(
               curl -X POST "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=refresh_token&refresh_token=$REFRESH_TOKEN" -u bx:bx
               ) | jq  -r .access_token
           )
-          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/security_groups/$SECURITY_GROUP/rules/$SECURITY_GROUP_RULE?version=2021-08-03&generation=2" -H "Authorization: $TOKEN"
+          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/security_groups/$SECURITY_GROUP/rules/$SECURITY_GROUP_RULE" -H "Authorization: Bearer $API_KEY"
         EOT
   }
   depends_on = [
