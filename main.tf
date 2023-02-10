@@ -33,6 +33,8 @@ resource "ibm_is_security_group_rule" "outbound_all" {
   remote    = "0.0.0.0/0"
 }
 
+data "ibm_iam_auth_token" "token" {}
+
 resource "null_resource" "delete_ingress_security_rule" { # This code executes to refresh the IAM token, so during the execution we would have the latest token updated of IAM cloud so we can destroy the security group rule through API calls
   provisioner "local-exec" {
     environment = {
