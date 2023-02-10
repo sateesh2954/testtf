@@ -46,6 +46,8 @@ resource "null_resource" "delete_ingress_security_rule" { # This code executes t
     command     = <<EOT
           echo $SECURITY_GROUP
           echo $SECURITY_GROUP_RULE
+          echo $REFRESH_TOKEN
+          echo $REGION
           TOKEN=$(
             echo $(
               curl -X POST "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=refresh_token&refresh_token=$REFRESH_TOKEN" -u bx:bx
