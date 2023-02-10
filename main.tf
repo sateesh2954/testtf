@@ -56,7 +56,7 @@ resource "null_resource" "delete_ingress_security_rule" { # This code executes t
               ) | jq  -r .access_token
           )
           echo $TOKEN
-          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/security_groups/$SECURITY_GROUP/rules/$SECURITY_GROUP_RULE?version=2021-08-03&generation=2" -H "Authorization: $TOKEN"
+          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/security_groups/$SECURITY_GROUP/rules/$SECURITY_GROUP_RULE" -H "Authorization: $TOKEN"
         EOT
   }
   depends_on = [
