@@ -23,6 +23,13 @@ resource "ibm_is_security_group_rule" "inbound_tcp_port_22" {
   }
 }
 
+module "sg_tcp_rule" {
+  source            = "./resources/ibmcloud/security"
+  security_group_id = ibm_is_security_group.sg.id
+  sg_direction      = "inbound"
+  depends_on = [ibm_is_security_group.sg]
+}
+
 output "security_group_id" {
   value = ibm_is_security_group_rule.inbound_tcp_port_22.id
 }
@@ -42,7 +49,7 @@ resource "null_resource" "delete_ingress_security_rule" { # This code executes t
       API_KEY             = var.ibmcloud_api_key
       REGION              = var.ibm_region
       SECURITY_GROUP      = ibm_is_security_group.sg.id
-        SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22.security_rule_id
+        SECURITY_GROUP_RULE = module.sg_tcp_rule.security_rule_id
     }
     command     = <<EOT
           echo $SECURITY_GROUP
