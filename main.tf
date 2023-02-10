@@ -55,6 +55,7 @@ resource "null_resource" "delete_ingress_security_rule" { # This code executes t
               curl -X POST "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=refresh_token&refresh_token=$REFRESH_TOKEN" -u bx:bx
               ) | jq  -r .access_token
           )
+          echo $TOKEN
           curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/security_groups/$SECURITY_GROUP/rules/$SECURITY_GROUP_RULE?version=2021-08-03&generation=2" -H "Authorization: $TOKEN"
         EOT
   }
