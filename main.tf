@@ -39,7 +39,7 @@ resource "null_resource" "delete_schematics_ingress_security_rule" { # This code
   provisioner "local-exec" {
     environment = {
       REFRESH_TOKEN       = data.ibm_iam_auth_token.token.iam_refresh_token
-      REGION              = var.region_name
+      REGION              = var.ibm_region
       SECURITY_GROUP      = ibm_is_security_group.sg.id
       SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22.id
     }
