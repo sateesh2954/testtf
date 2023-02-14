@@ -35,35 +35,27 @@ resource "ibm_is_security_group_rule" "outbound_all" {
 
 data "ibm_iam_auth_token" "token" {}
 
-resource "null_resource" "delete_ingress_security_rule" { # This code executes to refresh the IAM token, so during the execution we would have the latest token updated of IAM cloud so we can destroy the security group rule through API calls
+resource "null_resource" "delete_schematics_ingress_security_rule" { # This code executes to refresh the IAM token, so during the execution we would have the latest token updated of IAM cloud so we can destroy the security group rule through API calls
   provisioner "local-exec" {
     environment = {
       REFRESH_TOKEN       = data.ibm_iam_auth_token.token.iam_refresh_token
-      API_KEY             = var.ibmcloud_api_key
-      REGION              = var.ibm_region
-      SECURITY_GROUP      = ibm_is_security_group_rule.sg.id
-        SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22.id
+      REGION              = var.region_name
+      SECURITY_GROUP      = ibm_is_security_group.sg.id
+      SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22[0].id
     }
     command     = <<EOT
           echo $SECURITY_GROUP
           echo $SECURITY_GROUP_RULE
-          echo $REFRESH_TOKEN
-          echo $REGION
-          echo $API_KEY
           TOKEN=$(
             echo $(
               curl -X POST "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=refresh_token&refresh_token=$REFRESH_TOKEN" -u bx:bx
               ) | jq  -r .access_token
           )
-          echo $TOKEN
-          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/secgroups/{$SECURITY_GROUP}/rules/{$SECURITY_GROUP_RULE}" \
-              -H "Authorization: Bearer {$API_KEY}" \
-              -H "Content-Type: application/json"
+          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/security_groups/$SECURITY_GROUP/rules/$SECURITY_GROUP_RULE?version=2021-08-03&generation=2" -H "Authorization: $TOKEN"
         EOT
   }
   depends_on = [
-    ibm_is_security_group_rule.inbound_tcp_port_22
+    ibm_is_security_group.login_sg
   ]
 }
-
 
