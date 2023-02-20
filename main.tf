@@ -43,16 +43,7 @@ resource "null_resource" "delete_schematics_ingress_security_rule" { # This code
       SECURITY_GROUP      = ibm_is_security_group.sg.id
       SECURITY_GROUP_RULE = ibm_is_security_group_rule.inbound_tcp_port_22.rule_id
     }
-    command     = <<EOT
-          echo $SECURITY_GROUP
-          echo $SECURITY_GROUP_RULE
-          TOKEN=$(
-            echo $(
-              curl -X POST "https://iam.cloud.ibm.com/identity/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=refresh_token&refresh_token=$REFRESH_TOKEN" -u bx:bx
-              ) | jq  -r .access_token
-          )
-          curl -X DELETE "https://$REGION.iaas.cloud.ibm.com/v1/security_groups/$SECURITY_GROUP/rules/$SECURITY_GROUP_RULE?version=2021-08-03&generation=2" -H "Authorization: $TOKEN"
-        EOT
+    command     = ibmcloud is security-group-rule-delete $SECURITY_GROUP $SECURITY_GROUP_RULE
   }
   depends_on = [
     ibm_is_security_group_rule.inbound_tcp_port_22
